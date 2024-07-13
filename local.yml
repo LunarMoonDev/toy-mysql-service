@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  local_data: {}
+  local_backups: {}
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: ./compose/production/mysql/Dockerfile
+    image: parse_logs_local_mysql
+    container_name: parse_logs_local_mysql
+    volumes:
+      - local_data:/var/lib/mysql
+      - local_backups:/backups
+    ports:
+      - '3306:3306'
+    env_file:
+      - ./.envs/.local/.mysql
+    networks:
+      - project-network
+
+networks:
+  project-network:
+    name: parse-network
+    driver: bridge
